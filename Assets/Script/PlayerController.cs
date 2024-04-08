@@ -22,8 +22,6 @@ public class PlayerController : MonoBehaviour
     private float _screenLeft;
     private float _screenTop;
     private float _screenBottom;
-    private float _playerWidth;
-    private float _playerHeight;
 
     private int _horizontalDirection = 1;
     private int _verticalDirection = 1;
@@ -54,7 +52,6 @@ public class PlayerController : MonoBehaviour
         _guide.SetActive(true);
 
         SetScreenBoundaries();
-        SetPlayerBoundaries();
     }
 
     void SetScreenBoundaries()
@@ -63,12 +60,6 @@ public class PlayerController : MonoBehaviour
         _screenLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x + _wallWidth;
         _screenTop = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height, 0)).y - _wallWidth;
         _screenBottom = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).y + _wallWidth;
-    }
-
-    void SetPlayerBoundaries()
-    {
-        _playerWidth = _collider.bounds.size.x;
-        _playerHeight = _collider.bounds.size.y;
     }
 
     void Update()
@@ -137,11 +128,11 @@ public class PlayerController : MonoBehaviour
         // Move the player horizontally
         float newX = transform.position.x + _speed * _horizontalDirection * Time.deltaTime;
 
-        if (newX + _playerWidth / 2 > _screenRight)
+        if (newX > _screenRight)
         {
             _horizontalDirection = -1;
         }
-        else if (newX - _playerWidth / 2 < _screenLeft)
+        else if (newX < _screenLeft)
         {
             _horizontalDirection = 1;
         }
@@ -157,11 +148,11 @@ public class PlayerController : MonoBehaviour
         // Move the player vertically
         float newY = transform.position.y + _speed * _verticalDirection * Time.deltaTime;
 
-        if (newY + _playerHeight / 2 > _screenTop)
+        if (newY > _screenTop)
         {
             _verticalDirection = -1;
         }
-        else if (newY - _playerHeight / 2 < _screenBottom)
+        else if (newY < _screenBottom)
         {
             _verticalDirection = 1;
         }
@@ -191,7 +182,7 @@ public class PlayerController : MonoBehaviour
         get
         {
             // area of the circle
-            return (int)(Mathf.PI * Mathf.Pow(_circle.transform.localScale.x / 2, 2));
+            return (int)(Mathf.PI * Mathf.Pow(_circle.transform.localScale.x / 2, 2) * 100);
         }
     }
 }
